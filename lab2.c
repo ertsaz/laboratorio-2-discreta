@@ -1,6 +1,6 @@
 #include "conio2.h"
 #include <conio.h>
-#include <stdarg.h>
+#include <process.h>
 #include <stdio.h>  // no se nesecita para el programa pero lo pongo
 #include <stdlib.h> // para pausas
 #include <string.h>
@@ -64,14 +64,19 @@ int U[5];
 int A[5] = {0};
 int B[5] = {0};
 
-void imprime_menu(char menu[][40], int pos, int n);
 void menu_principal();
 void menu_secundario();
 void cargar_conjunto_refernencia();
+void funcion_caracteristica_universo();
+void settextxy(int, int, char *, int, int);
+void presentacion();
 
-//* FUNCIONES DE UI DE LA APLICACION
+//* FUNCIONES PARA LA UI DE LA APLICACION
+void imprime_menu(char menu[][40], int pos, int n);
 void marco(int, int, int, int);
 void textbackground(int);
+void gotoxy(int , int);
+void clreol(void);
 void highvideo(void);
 void lowvideo(void);
 void textcolor(int);
@@ -88,7 +93,6 @@ void encabezado(int, int);
 *                                █████     █████ █████   █████ █████ █████  ░░█████
 *                               ░░░░░     ░░░░░ ░░░░░   ░░░░░ ░░░░░ ░░░░░    ░░░░░ 
 */
-
 int main(void)
 {
     ventana(H, V);
@@ -138,6 +142,7 @@ void menu_principal()
         switch (pos)
         {
         case 0:
+            presentacion();
             break;
 
         case 1:
@@ -145,6 +150,7 @@ void menu_principal()
             break;
 
         case 2:
+            funcion_caracteristica_universo();
             break;
 
         case 3:
@@ -230,12 +236,12 @@ void imprime_menu(char menu[][40], int pos, int n)
     int i;
     system("cls");
     marco(1, 1, H, V);
-    encabezado(7,3);
-    gotoxy(2, 24);
-    cprintf("%c", 24);
-    gotoxy(2, 25);
-    cprintf("%c", 25);
-    cprintf("    FLECHAS PARA MOVER");
+    encabezado(7, 3);
+    gotoxy(2, V - 3);
+    printf("%c", 24);
+    gotoxy(2, V - 4);
+    printf("%c", 25);
+    cprintf("   FLECHAS PARA MOVER");
     gotoxy((H / 2) - 2, 9);
     cprintf("MENU");
     for (i = 0; i < n; i++)
@@ -267,7 +273,14 @@ void cargar_conjunto_refernencia()
     _setcursor(0);
     do
     {
-
+        gotoxy(50, 14);
+        printf("ESCOJA 5 ORGANOS PARA FORMAR ");
+        gotoxy(50, 15);
+        printf("EL CONJUNTO REFERENCIA");
+        gotoxy(50, 16);
+        printf("PORFAVOR NO REPETIR");
+        gotoxy(50, 18);
+        printf("%i escojidos de 5", fin);
         key = getch();
         switch (key)
         {
@@ -292,11 +305,41 @@ void cargar_conjunto_refernencia()
     } while (fin <= 4);
 
     system("cls");
-    printf("\nORGANOS QUE CONFIRMAN EL CONJUNTO REFERENCIA (R)\n");
-    printf("(R) = {");
+    marco(1, 1, H, V);
+    encabezado(7, 3);
+    gotoxy(2, 10);
+    printf("ORGANOS ESCOGIDOS PARA FORMAR CONJUNTO REFERENCIA (R)\n");
+    gotoxy(2, 11);
+    printf("(R) = { ");
     for (int i = 0; i <= 4; i++)
     {
-        U[i] = 1; //
+        if (i < 4)
+        {
+            cprintf("%s, ", organo_escogido[i]);
+        }
+        else
+        {
+            cprintf("%s }", organo_escogido[i]);
+        }
+    }
+
+    settextxy(H / 2 - 11, V - 3, "PRECIONE PARA CONTINUAR", 3, 1000);
+
+    getchar();
+}
+
+void funcion_caracteristica_universo()
+{
+    system("cls");
+    marco(1, 1, H, V);
+    encabezado(7, 3);
+    gotoxy(8, 13);
+    printf("CONJUNTO REFERENCIA (R)");
+    gotoxy(8, 15);
+    printf("(R) = { ");
+    for (int i = 0; i <= 4; i++)
+    {
+        U[i] = 1;
         if (i < 4)
         {
             printf("%s, ", organo_escogido[i]);
@@ -306,16 +349,59 @@ void cargar_conjunto_refernencia()
             printf("%s }", organo_escogido[i]);
         }
     }
+    gotoxy(60, 13);
+    printf("FUNCION CARACTERISTICA DE U");
+    gotoxy(60, 15);
+    printf("U = { ");
+    for (int j = 0; j <= 4; j++)
+    {
+        if (j < 4)
+        {
+            printf("%i, ", U[j]);
+        }
+        else
+        {
+            printf("%i }", U[j]);
+        }
+    }
 
-    getchar();
+    settextxy(H / 2 - 11, V - 3, "PRECIONE PARA CONTINUAR", 3, 1000);
+    getch();
 }
 
-void 
+void presentacion()
+{
+    int tx = H / 2;
+    int ty = 5;
+
+    system("cls");
+    system("COLOR F0");
+    gotoxy(tx - (int)(35 / 2), ty);
+    cprintf("UNIVERSIDAD TECNOLOGICA DE PANAM\xC1");
+    gotoxy(tx - (int)(45 / 2), ty + 2);
+    cprintf("FACULTAD DE INGENIERIA DE SISTEMAS COMPUTACIONALES");
+    gotoxy(tx - (int)(45 / 2), ty + 4);
+    cprintf("LIC. EN INGENIERIA EN SISTEMAS Y COMPUTACI\xD3N");
+    gotoxy(tx - (int)(54 / 2), ty + 6);
+    cprintf("DEPARTAMENTO DE COMPUTACI\xD3N Y SIMULACI\xD3N DE SISTEMAS");
+    gotoxy(tx - (int)(42 / 2), ty + 12);
+    cprintf("ESTRUCTURAS DISCRETAS PARA LA COMPUTACI\xD3N");
+    gotoxy(tx - (int)(25 / 2), ty + 16);
+    cprintf("TEMA: TEORIA DE CONJUNTO");
+    gotoxy(tx - (int)(28 / 2), ty + 20);
+    cprintf("DISE\xD1ADO Y PROGRAMADO POR:");
+    gotoxy(tx - (int)(27 / 2), ty + 22);
+    cprintf("ERNESTO S\xC1NCHEZ 9-743-681");
+
+    settextxy(H / 2 - 11, V - 3, "PRECIONE PARA CONTINUAR", 3, 1000);
+    getch();
+    system("COLOR 0F");
+}
 
 void encabezado(int x, int y)
 {
     textcolor(3);
-    marco(6 ,2 , 95, 9);
+    marco(6, 2, 95, 9);
     gotoxy(x, y);
     cprintf("  ______    ______   .__   __.        __   __    __  .__   __. .___________.  ______   \n");
     gotoxy(x, y + 1);
@@ -436,3 +522,41 @@ int ventana(int Ancho, int Alto)
     return 1;
 }
 
+void clreol(void)
+{
+    COORD coord;
+    DWORD written;
+
+    __fill_text_info();
+    coord.X = __CONIO_LEFT + __text_info.curx - 1;
+    coord.Y = __CONIO_TOP + __text_info.cury - 1;
+
+    FillConsoleOutputAttribute(GetStdHandle(STD_OUTPUT_HANDLE), __FOREGROUND + (__BACKGROUND << 4),
+                               __text_info.screenwidth - __text_info.curx + 1, coord, &written);
+    FillConsoleOutputCharacter(GetStdHandle(STD_OUTPUT_HANDLE), ' ', __text_info.screenwidth - __text_info.curx + 1, coord, &written);
+    gotoxy(__text_info.curx, __text_info.cury);
+}
+
+void settextxy(int x, int y, char *buf, int timestoBlink, int delayMilliSecs)
+{
+    COORD ord;
+    ord.X = x;
+    ord.Y = y;
+
+    int len = strlen(buf);
+    char *p = new char[len + 1];
+    memset(p, 32, len);
+    p[len] = '\0';
+
+    for (int i = 0; i < timestoBlink; i++)
+    {
+        gotoxy(x, y);
+        //std::cout << p;
+        printf("%s", p);
+        Sleep(300);
+        gotoxy(x, y);
+        //std::cout << buf;
+        printf("%s", buf);
+        Sleep(delayMilliSecs);
+    }
+}

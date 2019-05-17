@@ -511,18 +511,18 @@ extern "C"
         return 0;
     }
 
-    // Copies text from memory to the text mode screen.
-    // puttext writes the contents of the memory area pointed to by source out to
-    // the onscreen rectangle defined by left, top, right, and bottom.
-    // All coordinates are absolute screen coordinates, not window-relative. The
-    // upper left corner is (1,1).
-    // puttext places the contents of a memory area into the defined rectangle
-    // sequentially from left to right and top to bottom.
-    // Each position onscreen takes 2 bytes of memory: The first byte is the
-    // character in the cell, and the second is the cell's video attribute. The
-    // space required for a rectangle w columns wide by h rows high is defined as
-    //   bytes = (h rows) x (w columns) x 2
-    // puttext is a text mode function performing direct video output.
+    // Copia texto de la memoria a la pantalla de modo de texto.
+    // puttext escribe el contenido del área de memoria apuntada por la fuente a
+    // el rectángulo en pantalla definido por la izquierda, arriba, derecha y abajo.
+    // Todas las coordenadas son coordenadas absolutas de la pantalla, no relativas a la ventana. los
+    // La esquina superior izquierda es (1,1).
+    // puttext coloca los contenidos de un área de memoria en el rectángulo definido
+    // secuencialmente de izquierda a derecha y de arriba a abajo.
+    // Cada posición en pantalla toma 2 bytes de memoria: el primer byte es el
+    // carácter en la celda, y el segundo es el atributo de video de la celda. los
+    // el espacio requerido para un rectángulo w columnas de ancho por h filas de alto se define como
+    //    bytes = (h filas) x (w columnas) x 2
+    // puttext es una función de modo de texto que realiza una salida de video directa.
     int puttext(int left, int top, int right, int bottom, void *source)
     {
         PCHAR_INFO buffer;
