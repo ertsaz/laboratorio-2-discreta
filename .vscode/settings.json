@@ -1,0 +1,13 @@
+{
+    "C_Cpp.errorSquiggles": "Disabled",
+    "files.associations": {
+        "conio.h": "c",
+        "header.h": "c",
+        "stdio.h": "c",
+        "windows.h": "c",
+        "string.h": "c",
+        "stdarg.h": "c",
+        "conio2.h": "c",
+        "PROY2.C": "cpp"
+    }
+}
