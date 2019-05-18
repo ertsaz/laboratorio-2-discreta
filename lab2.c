@@ -74,7 +74,7 @@ void presentacion();
 void cargar_conjunto_A();
 
 //* FUNCIONES PARA LA UI DE LA APLICACION
-void imprime_menu(char menu[][40], int pos, int n);
+void imprime_menu(char menu[][40], int pos, int n, int x, int y, int lon);
 void marco(int, int, int, int);
 void textbackground(int);
 void gotoxy(int, int);
@@ -112,7 +112,7 @@ void menu_principal()
         fin = 0;
         repite = 1;
 
-        imprime_menu(opciones1, pos, 6);
+        imprime_menu(opciones1, pos, 6, (H / 2), 18, 13);
         _setcursor(0);
         do
         {
@@ -137,7 +137,7 @@ void menu_principal()
             }
 
             _setcursor(0);
-            imprime_menu(opciones1, pos, 6);
+            imprime_menu(opciones1, pos, 6, (H / 2), 18, 13);
 
         } while (!fin);
 
@@ -184,7 +184,7 @@ void menu_secundario()
         repite2 = 1;
 
         _setcursor(0);
-        imprime_menu(opciones2, pos, 4);
+        imprime_menu(opciones2, pos, 4, (H / 2), 18, 11);
         do
         {
 
@@ -208,7 +208,7 @@ void menu_secundario()
             }
 
             _setcursor(0);
-            imprime_menu(opciones2, pos, 4);
+            imprime_menu(opciones2, pos, 4, (H / 2), 18, 11);
 
         } while (!fin);
 
@@ -234,7 +234,7 @@ void menu_secundario()
     //return 0;
 }
 
-void imprime_menu(char menu[][40], int pos, int n)
+void imprime_menu(char menu[][40], int pos, int n, int x, int y, int lon)
 {
     int i;
     system("cls");
@@ -242,10 +242,10 @@ void imprime_menu(char menu[][40], int pos, int n)
     encabezado(7, 3);
     gotoxy(2, V - 3);
     printf("%c", 24);
-    gotoxy(2, V - 4);
+    gotoxy(4, V - 3);
     printf("%c", 25);
-    cprintf("   FLECHAS PARA MOVER");
-    gotoxy((H / 2) - 2, 9);
+    cprintf("    FLECHAS PARA MOVER");
+    gotoxy(x - 2, y);
     cprintf("MENU");
     for (i = 0; i < n; i++)
     {
@@ -253,14 +253,14 @@ void imprime_menu(char menu[][40], int pos, int n)
         {
             highvideo();
             textbackground(2);
-            gotoxy((H / 2) - 15, i + 11);
+            gotoxy(x - lon, i + (y + 3));
             cprintf("%s", menu[i]);
             lowvideo();
             textbackground(0);
         }
         else
         {
-            gotoxy((H / 2) - 15, i + 11);
+            gotoxy(x - lon, i + (y + 3));
             cprintf("%s", menu[i]);
         }
     }
@@ -272,7 +272,7 @@ void cargar_conjunto_refernencia()
     fin = 0;
     repite3 = 1;
 
-    imprime_menu(organos, pos, 21);
+    imprime_menu(organos, pos, 21, (H / 4), 9, 5);
     _setcursor(0);
     do
     {
@@ -304,7 +304,7 @@ void cargar_conjunto_refernencia()
             ++fin;
         }
         _setcursor(0);
-        imprime_menu(organos, pos, 21);
+        imprime_menu(organos, pos, 21, (H / 4), 9, 5);
     } while (fin <= 4);
 
     system("cls");
@@ -339,9 +339,40 @@ void cargar_conjunto_A()
     repite3 = 1;
     char c;
 
-    imprime_menu(menu_organo_escogido, pos, 5);
+    imprime_menu(menu_organo_escogido, pos, 5, (H / 4), 20, 5);
     do
     {
+        gotoxy(8, 13);
+        printf("CONJUNTO A");
+        gotoxy(8, 15);
+        printf("A = { ");
+        for (int i = 0; i <= 4; i++)
+        {
+            if (i < 4)
+            {
+                printf("%i, ", A[i]);
+            }
+            else
+            {
+                printf("%i }", A[i]);
+            }
+        }
+
+        gotoxy(50, 13);
+        printf("CONJUNTO B");
+        gotoxy(50, 15);
+        printf("B = { ");
+        for (int i = 0; i <= 4; i++)
+        {
+            if (i < 4)
+            {
+                printf("%i, ", B[i]);
+            }
+            else
+            {
+                printf("%i }", B[i]);
+            }
+        }
 
         key = getch();
         switch (key)
@@ -361,14 +392,14 @@ void cargar_conjunto_A()
         case 13:
             A[pos] = 1;
             ++fin;
+            gotoxy(50, 20);
+            printf("n(A) = %i  \'s\' PARA NUEVO ELEMENTO ", fin);
+            gotoxy(50, 21);
+            fflush(stdin);
+            cscanf("%c", &c);
         }
-        imprime_menu(menu_organo_escogido, pos, 5);
-        gotoxy(50, 20);
-        printf(" \'s\' para escoger un nuevo elemento del universo ");
-        gotoxy(50, 21);
-        fflush(stdin);
-        cscanf("%i", &c);
-    } while (c != 's');
+        imprime_menu(menu_organo_escogido, pos, 5, (H / 4), 20, 5);
+    } while (c != 'n');
 
     system("cls");
     marco(1, 1, H, V);
