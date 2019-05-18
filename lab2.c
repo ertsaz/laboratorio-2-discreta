@@ -59,6 +59,7 @@ char organos[21][40] = {"Cerebro", "lengua", "ojo",
                         "huesos", "m\xFAsculos", "piel"};
 
 char *organo_escogido[5];
+char menu_organo_escogido[5][40];
 
 int U[5];
 int A[5] = {0};
@@ -70,12 +71,13 @@ void cargar_conjunto_refernencia();
 void funcion_caracteristica_universo();
 void settextxy(int, int, char *, int, int);
 void presentacion();
+void cargar_conjunto_A();
 
 //* FUNCIONES PARA LA UI DE LA APLICACION
 void imprime_menu(char menu[][40], int pos, int n);
 void marco(int, int, int, int);
 void textbackground(int);
-void gotoxy(int , int);
+void gotoxy(int, int);
 void clreol(void);
 void highvideo(void);
 void lowvideo(void);
@@ -154,6 +156,7 @@ void menu_principal()
             break;
 
         case 3:
+            cargar_conjunto_A();
             break;
 
         case 4:
@@ -321,6 +324,69 @@ void cargar_conjunto_refernencia()
         {
             cprintf("%s }", organo_escogido[i]);
         }
+        strcpy(menu_organo_escogido[i], organo_escogido[i]);
+    }
+
+    settextxy(H / 2 - 11, V - 3, "PRECIONE PARA CONTINUAR", 3, 1000);
+
+    getchar();
+}
+
+void cargar_conjunto_A()
+{
+    pos = 0;
+    fin = 0;
+    repite3 = 1;
+    char c;
+
+    imprime_menu(menu_organo_escogido, pos, 5);
+    do
+    {
+
+        key = getch();
+        switch (key)
+        {
+        case 72:
+            if (pos == 0)
+                pos = 4;
+            else
+                pos--;
+            break;
+        case 80:
+            if (pos == 4)
+                pos = 0;
+            else
+                pos++;
+            break;
+        case 13:
+            A[pos] = 1;
+            ++fin;
+        }
+        imprime_menu(menu_organo_escogido, pos, 5);
+        gotoxy(50, 20);
+        printf(" \'s\' para escoger un nuevo elemento del universo ");
+        gotoxy(50, 21);
+        fflush(stdin);
+        cscanf("%i", &c);
+    } while (c != 's');
+
+    system("cls");
+    marco(1, 1, H, V);
+    encabezado(7, 3);
+    gotoxy(8, 13);
+    printf("CONJUNTO A");
+    gotoxy(8, 15);
+    printf("A = { ");
+    for (int i = 0; i <= 4; i++)
+    {
+        if (i < 4)
+        {
+            printf("%i, ", A[i]);
+        }
+        else
+        {
+            printf("%i }", A[i]);
+        }
     }
 
     settextxy(H / 2 - 11, V - 3, "PRECIONE PARA CONTINUAR", 3, 1000);
@@ -342,11 +408,11 @@ void funcion_caracteristica_universo()
         U[i] = 1;
         if (i < 4)
         {
-            printf("%s, ", organo_escogido[i]);
+            cprintf("%s, ", organo_escogido[i]);
         }
         else
         {
-            printf("%s }", organo_escogido[i]);
+            cprintf("%s }", organo_escogido[i]);
         }
     }
     gotoxy(60, 13);
@@ -378,7 +444,7 @@ void presentacion()
     system("COLOR F0");
     gotoxy(tx - (int)(35 / 2), ty);
     cprintf("UNIVERSIDAD TECNOLOGICA DE PANAM\xC1");
-    gotoxy(tx - (int)(45 / 2), ty + 2);
+    gotoxy(tx - (int)(51 / 2), ty + 2);
     cprintf("FACULTAD DE INGENIERIA DE SISTEMAS COMPUTACIONALES");
     gotoxy(tx - (int)(45 / 2), ty + 4);
     cprintf("LIC. EN INGENIERIA EN SISTEMAS Y COMPUTACI\xD3N");
@@ -388,8 +454,8 @@ void presentacion()
     cprintf("ESTRUCTURAS DISCRETAS PARA LA COMPUTACI\xD3N");
     gotoxy(tx - (int)(25 / 2), ty + 16);
     cprintf("TEMA: TEORIA DE CONJUNTO");
-    gotoxy(tx - (int)(28 / 2), ty + 20);
-    cprintf("DISE\xD1ADO Y PROGRAMADO POR:");
+    gotoxy(tx - (int)(16 / 2), ty + 20);
+    cprintf("PROGRAMADO POR:");
     gotoxy(tx - (int)(27 / 2), ty + 22);
     cprintf("ERNESTO S\xC1NCHEZ 9-743-681");
 

@@ -8,6 +8,7 @@
         "string.h": "c",
         "stdarg.h": "c",
         "conio2.h": "c",
-        "PROY2.C": "cpp"
+        "PROY2.C": "cpp",
+        "ESC.C": "cpp"
     }
 }
