@@ -17,6 +17,10 @@ text_info __text_info = {1, 1, LIGHTGRAY + (BLACK << 4), LIGHTGRAY + (BLACK << 4
 static int __CONIO_TOP = 0;
 static int __CONIO_LEFT = 0;
 
+const char *const verde = "\033[0;40;32m";
+const char *const subrayado_fazul_verde = "\033[4;44;32m";
+const char *const normal = "\033[0m";
+
 static void __fill_text_info(void)
 {
     CONSOLE_SCREEN_BUFFER_INFO info;
@@ -61,9 +65,15 @@ char organos[21][40] = {"Cerebro", "lengua", "ojo",
 char *organo_escogido[5];
 char menu_organo_escogido[5][40];
 
+//PARA ALMACENAR LOS CONJUNTOS INGRESADOS POR EL USUARIO
 int U[5];
 int A[5] = {0};
 int B[5] = {0};
+
+// PARA ALMACENAR LOS CONJUNTOS RESULTADOS DE LA OPERACIONES DE CONJUNTOS
+int Un[5];
+int In[5];
+int AC[5];
 
 void menu_principal();
 void menu_secundario();
@@ -71,7 +81,10 @@ void cargar_conjunto_refernencia();
 void funcion_caracteristica_universo();
 void settextxy(int, int, char *, int, int);
 void presentacion();
-void cargar_conjunto_A();
+void cargar_conjuntos();
+void Union();
+void interseccion();
+void A_c();
 
 //* FUNCIONES PARA LA UI DE LA APLICACION
 void imprime_menu(char menu[][40], int pos, int n, int x, int y, int lon);
@@ -156,7 +169,7 @@ void menu_principal()
             break;
 
         case 3:
-            cargar_conjunto_A();
+            cargar_conjuntos();
             break;
 
         case 4:
@@ -176,17 +189,79 @@ void menu_principal()
 
 void menu_secundario()
 {
-    _setcursor(0);
+    _setcursor(1);
     do
     {
         pos = 0;
         fin = 0;
         repite2 = 1;
 
-        _setcursor(0);
         imprime_menu(opciones2, pos, 4, (H / 2), 18, 11);
         do
         {
+
+            gotoxy(8, 11);
+            printf("CONJUNTO REFERENCIA (R)");
+            gotoxy(8, 12);
+            printf("(R) = { ");
+            for (int i = 0; i <= 4; i++)
+            {
+                if (i < 4)
+                {
+                    cprintf("%s, ", organo_escogido[i]);
+                }
+                else
+                {
+                    cprintf("%s }", organo_escogido[i]);
+                }
+            }
+            gotoxy(60, 11);
+            printf("FUNCION CARACTERISTICA DE U");
+            gotoxy(60, 12);
+            printf("U = { ");
+            for (int j = 0; j <= 4; j++)
+            {
+                if (j < 4)
+                {
+                    printf("%i, ", U[j]);
+                }
+                else
+                {
+                    printf("%i }", U[j]);
+                }
+            }
+
+            gotoxy(8, 14);
+            printf("CONJUNTO A");
+            gotoxy(8, 16);
+            printf("A = { ");
+            for (int i = 0; i <= 4; i++)
+            {
+                if (i < 4)
+                {
+                    printf("%i, ", A[i]);
+                }
+                else
+                {
+                    printf("%i }", A[i]);
+                }
+            }
+
+            gotoxy(50, 14);
+            printf("CONJUNTO B");
+            gotoxy(50, 16);
+            printf("B = { ");
+            for (int i = 0; i <= 4; i++)
+            {
+                if (i < 4)
+                {
+                    printf("%i, ", B[i]);
+                }
+                else
+                {
+                    printf("%i }", B[i]);
+                }
+            }
 
             key = getch();
             switch (key)
@@ -215,12 +290,63 @@ void menu_secundario()
         switch (pos)
         {
         case 0:
+            Union();
+            gotoxy(70, 20);
+            printf("A union B");
+            gotoxy(70, 22);
+            cprintf("A U B = { ");
+            for (int i = 0; i <= 4; i++)
+            {
+                if (i < 4)
+                {
+                    printf("%i, ", Un[i]);
+                }
+                else
+                {
+                    printf("%i }", Un[i]);
+                }
+            }
+            getch();
             break;
 
         case 1:
+            interseccion();
+            gotoxy(70, 20);
+            printf("A interseccion B");
+            gotoxy(70, 22);
+            cprintf("A \xEF B = { ");
+            for (int i = 0; i <= 4; i++)
+            {
+                if (i < 4)
+                {
+                    printf("%i, ", In[i]);
+                }
+                else
+                {
+                    printf("%i }", In[i]);
+                }
+            }
+            getch();
             break;
 
         case 2:
+            A_c();
+            gotoxy(70, 20);
+            printf("Complemento de A");
+            gotoxy(70, 22);
+            cprintf("A\' = { ");
+            for (int i = 0; i <= 4; i++)
+            {
+                if (i < 4)
+                {
+                    printf("%i, ", AC[i]);
+                }
+                else
+                {
+                    printf("%i }", AC[i]);
+                }
+            }
+            getch();
             break;
 
         case 3:
@@ -232,6 +358,57 @@ void menu_secundario()
     } while (repite2);
 
     //return 0;
+}
+
+void Union()
+{
+    for (int i = 0; i < 4; i++)
+    {
+        Un[i] = A[i];
+    }
+
+    for (int j = 0; j < 4; j++)
+    {
+        if (Un[j] = 1)
+        {
+        }
+        else
+        {
+            Un[j] = B[j];
+        }
+    }
+}
+
+void interseccion()
+{
+    for (int i = 0; i < 4; i++)
+    {
+
+        if (A[i] == B[i])
+        {
+            In[i] = 1;
+        }
+        else
+        {
+            In[i] = 0;
+        }
+    }
+}
+
+void A_c()
+{
+    for (int i = 0; i < 4; i++)
+    {
+
+        if (A[i] == 1)
+        {
+            AC[i] = 0;
+        }
+        else
+        {
+            AC[i] = 1;
+        }
+    }
 }
 
 void imprime_menu(char menu[][40], int pos, int n, int x, int y, int lon)
@@ -332,11 +509,10 @@ void cargar_conjunto_refernencia()
     getchar();
 }
 
-void cargar_conjunto_A()
+void cargar_conjuntos()
 {
     pos = 0;
     fin = 0;
-    repite3 = 1;
     char c;
 
     imprime_menu(menu_organo_escogido, pos, 5, (H / 4), 20, 5);
@@ -400,6 +576,69 @@ void cargar_conjunto_A()
         }
         imprime_menu(menu_organo_escogido, pos, 5, (H / 4), 20, 5);
     } while (c != 'n');
+    c = 's';
+    fin = 0;
+    fflush(stdin);
+    do
+    {
+        gotoxy(8, 13);
+        printf("CONJUNTO A");
+        gotoxy(8, 15);
+        printf("A = { ");
+        for (int i = 0; i <= 4; i++)
+        {
+            if (i < 4)
+            {
+                printf("%i, ", A[i]);
+            }
+            else
+            {
+                printf("%i }", A[i]);
+            }
+        }
+
+        gotoxy(50, 13);
+        printf("CONJUNTO B");
+        gotoxy(50, 15);
+        printf("B = { ");
+        for (int i = 0; i <= 4; i++)
+        {
+            if (i < 4)
+            {
+                printf("%i, ", B[i]);
+            }
+            else
+            {
+                printf("%i }", B[i]);
+            }
+        }
+
+        key = getch();
+        switch (key)
+        {
+        case 72:
+            if (pos == 0)
+                pos = 4;
+            else
+                pos--;
+            break;
+        case 80:
+            if (pos == 4)
+                pos = 0;
+            else
+                pos++;
+            break;
+        case 13:
+            B[pos] = 1;
+            ++fin;
+            gotoxy(50, 20);
+            printf("n(B) = %i  \'s\' PARA NUEVO ELEMENTO ", fin);
+            gotoxy(50, 21);
+            fflush(stdin);
+            cscanf("%c", &c);
+        }
+        imprime_menu(menu_organo_escogido, pos, 5, (H / 4), 20, 5);
+    } while (c != 'n');
 
     system("cls");
     marco(1, 1, H, V);
@@ -420,9 +659,29 @@ void cargar_conjunto_A()
         }
     }
 
+    gotoxy(50, 13);
+    printf("CONJUNTO B");
+    gotoxy(50, 15);
+    printf("B = { ");
+    for (int i = 0; i <= 4; i++)
+    {
+        if (i < 4)
+        {
+            printf("%i, ", B[i]);
+        }
+        else
+        {
+            printf("%i }", B[i]);
+        }
+    }
+
     settextxy(H / 2 - 11, V - 3, "PRECIONE PARA CONTINUAR", 3, 1000);
 
     getchar();
+}
+
+void seleccion_de_conjunto()
+{
 }
 
 void funcion_caracteristica_universo()
@@ -551,6 +810,16 @@ void marco(int x, int y, int l, int b)
     printf("%c", 188);
 }
 
+/*
+!     ██████                                  ███                                          █████  █████ █████
+!    ███░░███                                ░░░                                          ░░███  ░░███ ░░███ 
+!   ░███ ░░░  █████ ████ ████████    ██████  ████   ██████  ████████    ██████   █████     ░███   ░███  ░███ 
+!  ███████   ░░███ ░███ ░░███░░███  ███░░███░░███  ███░░███░░███░░███  ███░░███ ███░░      ░███   ░███  ░███ 
+! ░░░███░     ░███ ░███  ░███ ░███ ░███ ░░░  ░███ ░███ ░███ ░███ ░███ ░███████ ░░█████     ░███   ░███  ░███ 
+!   ░███      ░███ ░███  ░███ ░███ ░███  ███ ░███ ░███ ░███ ░███ ░███ ░███░░░   ░░░░███    ░███   ░███  ░███ 
+!   █████     ░░████████ ████ █████░░██████  █████░░██████  ████ █████░░██████  ██████     ░░████████   █████
+!  ░░░░░       ░░░░░░░░ ░░░░ ░░░░░  ░░░░░░  ░░░░░  ░░░░░░  ░░░░ ░░░░░  ░░░░░░  ░░░░░░       ░░░░░░░░   ░░░░░ 
+*/
 void textbackground(int color)
 {
     __BACKGROUND = color;
