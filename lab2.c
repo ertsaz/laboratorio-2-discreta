@@ -7,7 +7,6 @@
 #include <unistd.h>
 #include <windows.h> // para hacer la estructura del gotoxy
 
-#define ESCAPE_KEY 27
 #define H 100
 #define V 40
 
@@ -77,9 +76,9 @@ void clreol(void);
 void highvideo(void);
 void lowvideo(void);
 void textcolor(int);
-void _setcursor(int);
 int ventana(int, int);
 void encabezado(int, int);
+void OcultarCursor();
 /*
 *                                ██████   ██████   █████████   █████ ██████   █████
 *                               ░░██████ ██████   ███░░░░░███ ░░███ ░░██████ ░░███ 
@@ -93,6 +92,7 @@ void encabezado(int, int);
 int main(void)
 {
     ventana(H, V);
+    OcultarCursor();
     menu_principal();
 
     return EXIT_SUCCESS;
@@ -168,7 +168,7 @@ void menu_principal()
 
 void menu_secundario()
 {
-    _setcursor(1);
+
     do
     {
         pos = 0;
@@ -492,7 +492,10 @@ void cargar_conjuntos()
     do
     {
         gotoxy(8, 13);
+        textbackground(3);
+        textcolor(15);
         printf("CONJUNTO A");
+        textbackground(0);
         gotoxy(8, 15);
         printf("A = { ");
         for (int i = 0; i <= 4; i++)
@@ -571,7 +574,9 @@ void cargar_conjuntos()
         }
 
         gotoxy(50, 13);
+        textbackground(3);
         printf("CONJUNTO B");
+        textbackground(0);
         gotoxy(50, 15);
         printf("B = { ");
         for (int i = 0; i <= 4; i++)
@@ -793,6 +798,7 @@ void marco(int x, int y, int l, int b)
 !   █████     ░░████████ ████ █████░░██████  █████░░██████  ████ █████░░██████  ██████     ░░████████   █████
 !  ░░░░░       ░░░░░░░░ ░░░░ ░░░░░  ░░░░░░  ░░░░░  ░░░░░░  ░░░░ ░░░░░  ░░░░░░  ░░░░░░       ░░░░░░░░   ░░░░░ 
 */
+// fnciones para mejorar la interfaz
 void textbackground(int color)
 {
     __BACKGROUND = color;
@@ -867,4 +873,14 @@ void settextxy(int x, int y, char *buf, int timestoBlink, int delayMilliSecs)
         printf("%s", buf);
         Sleep(delayMilliSecs);
     }
+}
+
+void OcultarCursor()
+{
+    HANDLE hCon;
+    hCon = GetStdHandle(STD_OUTPUT_HANDLE);
+    CONSOLE_CURSOR_INFO cci;
+    cci.dwSize = 2;
+    cci.bVisible = 0;
+    SetConsoleCursorInfo(hCon, &cci);
 }
