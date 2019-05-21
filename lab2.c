@@ -17,24 +17,6 @@ text_info __text_info = {1, 1, LIGHTGRAY + (BLACK << 4), LIGHTGRAY + (BLACK << 4
 static int __CONIO_TOP = 0;
 static int __CONIO_LEFT = 0;
 
-const char *const verde = "\033[0;40;32m";
-const char *const subrayado_fazul_verde = "\033[4;44;32m";
-const char *const normal = "\033[0m";
-
-static void __fill_text_info(void)
-{
-    CONSOLE_SCREEN_BUFFER_INFO info;
-
-    GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &info);
-    __CONIO_LEFT = info.srWindow.Left;
-    __CONIO_TOP = info.srWindow.Top;
-    __text_info.curx = info.dwCursorPosition.X - __CONIO_LEFT + 1;
-    __text_info.cury = info.dwCursorPosition.Y - __CONIO_TOP + 1;
-    __text_info.attribute = info.wAttributes;
-    __text_info.screenwidth = info.srWindow.Right - info.srWindow.Left + 1;
-    __text_info.screenheight = info.srWindow.Bottom - info.srWindow.Top + 1;
-}
-
 //VARIABLES PARA CONTROLAR LOS DIFERENTES MENUS
 int pos = 0, fin = 0;
 int repite = 1;
@@ -118,7 +100,6 @@ int main(void)
 
 void menu_principal()
 {
-    _setcursor(0);
     do
     {
         pos = 0;
@@ -126,7 +107,6 @@ void menu_principal()
         repite = 1;
 
         imprime_menu(opciones1, pos, 6, (H / 2), 18, 13);
-        _setcursor(0);
         do
         {
 
@@ -149,7 +129,6 @@ void menu_principal()
                 fin = 1;
             }
 
-            _setcursor(0);
             imprime_menu(opciones1, pos, 6, (H / 2), 18, 13);
 
         } while (!fin);
@@ -282,7 +261,6 @@ void menu_secundario()
                 fin = 1;
             }
 
-            _setcursor(0);
             imprime_menu(opciones2, pos, 4, (H / 2), 18, 11);
 
         } while (!fin);
@@ -362,17 +340,14 @@ void menu_secundario()
 
 void Union()
 {
-    for (int i = 0; i < 4; i++)
+    for (int i = 0; i < 5; i++)
     {
         Un[i] = A[i];
     }
 
-    for (int j = 0; j < 4; j++)
+    for (int j = 0; j < 5; j++)
     {
-        if (Un[j] = 1)
-        {
-        }
-        else
+        if (Un[j] != 1)
         {
             Un[j] = B[j];
         }
@@ -381,10 +356,10 @@ void Union()
 
 void interseccion()
 {
-    for (int i = 0; i < 4; i++)
+    for (int i = 0; i < 5; i++)
     {
 
-        if (A[i] == B[i])
+        if (A[i] == B[i] & A[i] == 1 & B[i] == 1)
         {
             In[i] = 1;
         }
@@ -397,7 +372,7 @@ void interseccion()
 
 void A_c()
 {
-    for (int i = 0; i < 4; i++)
+    for (int i = 0; i < 5; i++)
     {
 
         if (A[i] == 1)
@@ -449,8 +424,7 @@ void cargar_conjunto_refernencia()
     fin = 0;
     repite3 = 1;
 
-    imprime_menu(organos, pos, 21, (H / 4), 9, 5);
-    _setcursor(0);
+    imprime_menu(organos, pos, 21, (H / 4), 10, 5);
     do
     {
         gotoxy(50, 14);
@@ -480,16 +454,15 @@ void cargar_conjunto_refernencia()
             organo_escogido[fin] = organos[pos];
             ++fin;
         }
-        _setcursor(0);
-        imprime_menu(organos, pos, 21, (H / 4), 9, 5);
+        imprime_menu(organos, pos, 21, (H / 4), 10, 5);
     } while (fin <= 4);
 
     system("cls");
     marco(1, 1, H, V);
     encabezado(7, 3);
-    gotoxy(2, 10);
+    gotoxy((H / 2) - 27, 20);
     printf("ORGANOS ESCOGIDOS PARA FORMAR CONJUNTO REFERENCIA (R)\n");
-    gotoxy(2, 11);
+    gotoxy((H / 2) - 27, 21);
     printf("(R) = { ");
     for (int i = 0; i <= 4; i++)
     {
@@ -852,22 +825,6 @@ void textcolor(int color)
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color + (__BACKGROUND << 4));
 }
 
-void _setcursor(int type)
-{
-    CONSOLE_CURSOR_INFO Info;
-
-    if (type == 0)
-    {
-        Info.bVisible = FALSE;
-    }
-    else
-    {
-        Info.dwSize = type;
-        Info.bVisible = TRUE;
-    }
-    SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &Info);
-}
-
 int ventana(int Ancho, int Alto)
 {
     COORD Coordenada;
@@ -886,21 +843,6 @@ int ventana(int Ancho, int Alto)
     // Cambiar tamaño de consola a lo especificado en el buffer
     SetConsoleWindowInfo(GetStdHandle(STD_OUTPUT_HANDLE), 1, &Rect);
     return 1;
-}
-
-void clreol(void)
-{
-    COORD coord;
-    DWORD written;
-
-    __fill_text_info();
-    coord.X = __CONIO_LEFT + __text_info.curx - 1;
-    coord.Y = __CONIO_TOP + __text_info.cury - 1;
-
-    FillConsoleOutputAttribute(GetStdHandle(STD_OUTPUT_HANDLE), __FOREGROUND + (__BACKGROUND << 4),
-                               __text_info.screenwidth - __text_info.curx + 1, coord, &written);
-    FillConsoleOutputCharacter(GetStdHandle(STD_OUTPUT_HANDLE), ' ', __text_info.screenwidth - __text_info.curx + 1, coord, &written);
-    gotoxy(__text_info.curx, __text_info.cury);
 }
 
 void settextxy(int x, int y, char *buf, int timestoBlink, int delayMilliSecs)
