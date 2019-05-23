@@ -43,6 +43,7 @@ char organos[21][40] = {"Cerebro", "lengua", "ojo",
                         "Pene", "cl\xEDtoris", "test\xEDculos", "\xFAtero", "pr\xF3stata", "vejiga",
                         "huesos", "m\xFAsculos", "piel"};
 
+// ALMACENAMIENTO DE LOS ORGANOS ESCOJIDOS POR EL USUARIO
 char *organo_escogido[5];
 char menu_organo_escogido[5][40];
 
