@@ -57,6 +57,10 @@ int Un[5];
 int In[5];
 int AC[5];
 
+int nUn;
+int nIn;
+int nCa;
+
 void menu_principal();
 void menu_secundario();
 void cargar_conjunto_refernencia();
@@ -269,6 +273,7 @@ void menu_secundario()
         switch (pos)
         {
         case 0:
+            nUn = 0;
             Union();
             gotoxy(70, 20);
             printf("A union B");
@@ -285,10 +290,34 @@ void menu_secundario()
                     printf("%i }", Un[i]);
                 }
             }
+
+            gotoxy(8, 29);
+            printf("Organos");
+            gotoxy(8, 30);
+            printf("(A U B) = { ");
+            for (int i = 0; i <= 4; i++)
+            {
+                if (Un[i] == 1)
+                {
+                    nUn++;
+
+                    if (i < 4)
+                    {
+                        cprintf("%s, ", organo_escogido[i]);
+                    }
+                    else
+                    {
+                        cprintf("%s }", organo_escogido[i]);
+                    }
+                }
+            }
+            gotoxy(8, 31);
+            printf("n(A U B) = %i", nUn);
             getch();
             break;
 
         case 1:
+            nIn = 0;
             interseccion();
             gotoxy(70, 20);
             printf("A interseccion B");
@@ -305,10 +334,33 @@ void menu_secundario()
                     printf("%i }", In[i]);
                 }
             }
+            gotoxy(8, 29);
+            printf("Organos");
+            gotoxy(8, 30);
+            printf("(A ∩ B) = { ");
+            for (int i = 0; i <= 4; i++)
+            {
+                if (Un[i] == 1)
+                {
+                    nIn++;
+
+                    if (i < 4)
+                    {
+                        cprintf("%s, ", organo_escogido[i]);
+                    }
+                    else
+                    {
+                        cprintf("%s }", organo_escogido[i]);
+                    }
+                }
+            }
+            gotoxy(8, 31);
+            printf("n(A U B) = %i", nIn);
             getch();
             break;
 
         case 2:
+            nAc = 0;
             A_c();
             gotoxy(70, 20);
             printf("Complemento de A");
@@ -325,6 +377,28 @@ void menu_secundario()
                     printf("%i }", AC[i]);
                 }
             }
+            gotoxy(8, 29);
+            printf("Organos");
+            gotoxy(8, 30);
+            printf("(A\') = { ");
+            for (int i = 0; i <= 4; i++)
+            {
+                if (Un[i] == 1)
+                {
+                    nAc++;
+
+                    if (i < 4)
+                    {
+                        cprintf("%s, ", organo_escogido[i]);
+                    }
+                    else
+                    {
+                        cprintf("%s }", organo_escogido[i]);
+                    }
+                }
+            }
+            gotoxy(8, 31);
+            printf("n(A\') = %i", nAc);
             getch();
             break;
 
@@ -341,16 +415,11 @@ void menu_secundario()
 
 void Union()
 {
-    for (int i = 0; i < 5; i++)
-    {
-        Un[i] = A[i];
-    }
-
     for (int j = 0; j < 5; j++)
     {
-        if (Un[j] != 1)
+        if ((A[j] == 1 & B[j] == 1) | A[j] != 1 | B[j] != 1)
         {
-            Un[j] = B[j];
+            Un[j] = 1;
         }
     }
 }
@@ -487,7 +556,7 @@ void cargar_conjuntos()
 {
     pos = 0;
     fin = 0;
-    char c;
+    char c = 's';
 
     imprime_menu(menu_organo_escogido, pos, 5, (H / 4), 20, 5);
     do
