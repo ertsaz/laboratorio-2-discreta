@@ -340,7 +340,7 @@ void menu_secundario()
             printf("(A ∩ B) = { ");
             for (int i = 0; i <= 4; i++)
             {
-                if (Un[i] == 1)
+                if (In[i] == 1)
                 {
                     nIn++;
 
@@ -360,7 +360,7 @@ void menu_secundario()
             break;
 
         case 2:
-            nAc = 0;
+            nCa = 0;
             A_c();
             gotoxy(70, 20);
             printf("Complemento de A");
@@ -383,9 +383,9 @@ void menu_secundario()
             printf("(A\') = { ");
             for (int i = 0; i <= 4; i++)
             {
-                if (Un[i] == 1)
+                if (AC[i] == 1)
                 {
-                    nAc++;
+                    nCa++;
 
                     if (i < 4)
                     {
@@ -398,7 +398,7 @@ void menu_secundario()
                 }
             }
             gotoxy(8, 31);
-            printf("n(A\') = %i", nAc);
+            printf("n(A\') = %i", nCa);
             getch();
             break;
 
